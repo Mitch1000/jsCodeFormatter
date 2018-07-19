@@ -1,0 +1,15 @@
+.main-header {
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  justify-content: space-around;
+  color: #505050;
+}
+
+.main-header > p {
+  margin-bottom:3%;
+}
+
+b {
+  color: black;
+}
