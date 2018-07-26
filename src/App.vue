@@ -26,11 +26,10 @@
             </div>
           </div>
           <h3>
-            Enter your javascript for formatting here:
+            Enter your code for formatting here:
           </h3>
-          <textarea class="js-text-formatter__text-area" v-model="textForFormatting" />
         </form>
-        <form class="js-text-formatter__form">
+        <form class="js-text-formatter__form js-text-formatted-area" >
           <div class="selections-container">
             <h3>
               Format to:
@@ -49,12 +48,24 @@
             </div>
           </div>
           <h3>
-            Formatted javascript will display here:
+            Formatted code will display here:
           </h3>
-          <textarea class="js-text-formatter__text-area" v-model="formattedText" />
         </form>
       </div>
 
+      <div class="js-text-codemirror-container">
+        <div
+        class="js-text-formatter__text-area"
+        id="codemirror-formatted"/>
+        <div class="git-hub-link">
+          <a href="https://github.com/Mitch1000/jsCodeFormatter" class="git-hub-logo-2">
+            GitHub
+          </a>
+          <a href="https://github.com/Mitch1000/jsCodeFormatter" class="git-hub-logo">
+            GitHub
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -62,11 +73,9 @@
 <script>
 
 import codeFormatter from './helpers/codeFormatter';
+import codeMirror from './utilities/codeMirror';
 
 export default {
-  components: {
-  },
-
   data() {
     return {
       textForFormatting: '',
@@ -77,22 +86,15 @@ export default {
     };
   },
 
-  computed: {
-    /**
-     * A test compute property
-     *
-     * @return {Boolean}
-     */
-    computedProperty() {
-    },
-  },
-
-  created() {
+  mounted() {
+    this.codeMirror = codeMirror();
   },
 
   methods: {
     formatCode() {
-      this.formattedText = codeFormatter(this.textForFormatting, this.formatTo, this.formatFrom);
+      const textForFormatting = this.codeMirror.edit.getValue();
+      const formattedCode = codeFormatter(textForFormatting, this.formatTo, this.formatFrom);
+      this.codeMirror.rightOriginal().setValue(formattedCode);
     },
 
     selectFormatFrom(format) {
@@ -108,7 +110,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-  @import "./buttons.css";
+  @import "./css/buttons.css";
 
   .buttons-container {
     margin-top: -4%;
@@ -121,6 +123,7 @@ export default {
   }
 
   .convert-button-container {
+    margin-bottom:2%;
     display: flex;
     justify-content: space-around;
   }
@@ -134,22 +137,57 @@ export default {
     font-family: Arial, Helvetica, sans-serif;
   }
 
+  .git-hub-logo-2 {
+    margin-right: 0.3em;
+    display: block;
+    text-indent: -9999px;
+    width: 20px;
+    height: 20px;
+    background: url(https://git-scm.com/images/logos/downloads/Git-Icon-Black.png);
+    background-size: 20px 20px;
+  }
+
+  .git-hub-logo {
+    margin-top: 2px;
+    display: block;
+    text-indent: -9999px;
+    width: 60px;
+    height: 15px;
+    background: url(https://github-media-downloads.s3.amazonaws.com/github-logo.svg);
+    background-size: 60px 15px;
+  }
+
+  div.git-hub-link {
+    display: flex;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    font-size: 14pt;
+    color: #505050;
+  }
+
+  div.git-hub-link > a:visited {
+    color: #a16a94;
+  }
+
+  .js-text-formatted-area {
+    padding-left: 6%;
+  }
+
   .js-text-formatter {
     color: #505050;
-    width: 95%;
+    width: 98%;
     margin: auto;
   }
 
   .js-text-formatter__form {
-    min-width: 48%;
+    width: 98%;
+  }
+
+  .js-text-codemirror-container {
+    height: 930px;
   }
 
   .js-text-formatter__text-area {
-    margin-bottom: 20px;
-    padding: 6px 10px;
-    border: 1px solid grey;
-    height: 800px;
-    width: 100%;
     min-width: 100%;
     font-family: "museo-sans",sans-serif;
     font-size: 1.14em;

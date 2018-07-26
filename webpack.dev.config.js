@@ -19,7 +19,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          hotReload: true, // disables Hot Reload
+          hotReload: true,
         },
       },
       // this will apply to both plain `.css` files

@@ -1,44 +1,51 @@
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJsPlugin = require('uglify-js-plugin');
+const path = require('path');
 
 module.exports = {
-    entry: './src/app.js',
-    output: {
-        path: './dist/',
-        filename: 'app.bundle.js'
-    },
-    module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          exclude: /(node_modules)/,
-          loader: 'babel-loader',
-          query: {
-            presets: ['es2015']
-          }
-        }
-      ]
-    },
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: true,
-            mangle: true,
-            comments: false,
-            sourceMap: true
-        }),
-        new webpack.optimize.DedupePlugin(),
-        new CopyWebpackPlugin([
-            { from: './src/index.html',     to: '../dist/index.html' },
+  mode: 'development',
+  entry: ['./src/app.js'],
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'app.bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'babel-loader',
+      },
+      {
+        // vue-loader config to load `.vue` files or single file components.
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      // this will apply to both plain `.css` files
+      // AND `<style>` blocks in `.vue` files
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new VueLoaderPlugin(),
+    new UglifyJsPlugin({
+      compress: true,
+      mangle: true,
+      comments: false,
+      sourceMap: true,
+    }),
+    new CopyWebpackPlugin([
+      { from: './src/index.html', to: '../dist/index.html' },
+      { from: './src/css', to: '../dist/css' },
 
-            { from: './src/css',            to: '../dist/css' },
-            { from: './src/fonts',          to: '../dist/fonts' },
-            { from: './src/lib',            to: '../dist/lib' },
-            { from: './src/img',            to: '../dist/img' },
+      { from: './nginx.conf', to: '../dist/nginx.conf' },
+    ]),
 
-            { context: './src/',    from: '**/*.template.html',     to: '../dist/' },
-            { context: './src/',    from: '**/*.json',              to: '../dist/' },
-
-            { from: './nginx.conf',  to: '../dist/nginx.conf' }
-        ])
-    ]
+  ],
 };

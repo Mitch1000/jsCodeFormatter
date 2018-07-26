@@ -1,4 +1,3 @@
-import humps from 'humps';
 import Case from 'case';
 
 function formats(text) {
@@ -6,22 +5,22 @@ function formats(text) {
     'camelCase': {
       wordContainsFormat: Case.of(text) === 'camel',
       lineContainsFormat: true,
-      formatter: humps.camelize(text),
+      formatter: Case.camel(text),
     },
     'snake_case': {
       wordContainsFormat: Case.of(text) === 'snake',
       lineContainsFormat: text.includes('_'),
-      formatter: humps.decamelize(text),
+      formatter: Case.snake(text),
     },
     'kebab-case': {
       wordContainsFormat: Case.of(text) === 'kebab',
-      lineContainsFormat: text.includes('-') && /^[a-zA-Z]/.test(text),
+      lineContainsFormat: text.includes('-') && /[a-zA-Z]/.test(text),
       formatter: Case.kebab(text),
     },
     'PascalCase': {
       wordContainsFormat: Case.of(text) === 'pascal',
       lineContainsFormat: (/[a-z]/.test(text)),
-      formatter: humps.pascalize(text),
+      formatter: Case.pascal(text),
     },
   };
 }
@@ -40,21 +39,25 @@ function formatWord(format, text) {
 
 function codeFormatter(text, formatTo, formatFrom) {
   if ((text || '').length <= 0) return '';
-  let formattedText = '';
-  text.split('\n').forEach((line) => {
-    if (lineContainsFormat(formatFrom, line)) {
-      let camelizedLine = line;
 
-      const words = line.trim().split(/[^A-Za-z0-9_]/);
+  let formattedText = '';
+
+  const linesOfUnformattedCode = text.split('\n');
+
+  linesOfUnformattedCode.forEach((line, i) => {
+    let camelizedLine = line;
+    if (lineContainsFormat(formatFrom, line)) {
+      const words = line.trim().split(/[^A-Za-z0-9_-]/);
       words.forEach((word) => {
         if (wordContainsFormat(formatFrom, word)) {
           camelizedLine = camelizedLine.replace(word, formatWord(formatTo, word));
         }
       });
-      formattedText = formattedText.concat(`${camelizedLine}\n`);
-    } else {
-      formattedText = formattedText.concat(`${line}\n`);
     }
+
+    formattedText = formattedText.concat(camelizedLine);
+    const isLastLine = i === linesOfUnformattedCode.length - 1;
+    if (!isLastLine) { formattedText = formattedText.concat('\n'); }
   });
 
   return formattedText;

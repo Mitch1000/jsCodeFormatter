@@ -1,13 +1,13 @@
 .bg-gradient1 span,
 .bg-gradient1:before {
   background: #B9AEF0;
-  background: linear-gradient(180deg, #bfb6ed 0%, #B9AEF0 80%, #B9AEF0 100%);
+  background: linear-gradient(180deg, #00bc5e 0%, #01a252 80%, #01a252 100%);
 }
 
 .bg-gradient2 span,
 .bg-gradient2:before {
   background: #93e2c9;
-  background: linear-gradient(180deg, #91e2c9 0%, #63ccab 80%, #63ccab 100%);
+  background: linear-gradient(180deg, #3a3432 0%, #514845 80%, #514845 100%);
 }
 
 a {
@@ -19,7 +19,7 @@ a:hover, a:focus, a:active {
 
 .button {
   display: inline-block;
-  font-family: 'Heebo', Helvetica, Arial, sans-serif;
+  font-family: monospace;
   font-weight: 400;
   letter-spacing: 0.07em;
   color: #ffffff;
@@ -29,7 +29,7 @@ a:hover, a:focus, a:active {
 /* fancy Button */
 .fancy-button {
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 24px;
 }
 .button.bg-gradient1 {
@@ -59,7 +59,7 @@ a:hover, a:focus, a:active {
 .radio-button-selected span,
 .radio-button-selected:before {
   background: #B9AEF0;
-  background: linear-gradient(180deg, #baafed 0%, #9a8cdb 80%, #9a8cdb 100%);
+  background: linear-gradient(180deg, #00bc5e 0%, #01a252 80%, #01a252 100%);
 }
 
 .radio-button-container {
@@ -69,6 +69,7 @@ a:hover, a:focus, a:active {
 
 .radio-button > span {
   padding: 6px 10px;
+  font-size: 14px;
 }
 
 .button > span {
